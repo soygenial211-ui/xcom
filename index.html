@@ -37,7 +37,7 @@
     <div id="screen-login" class="login-screen">
         <h1 style="letter-spacing: 3px;">XCOM: ACCESO A CENTRAL</h1>
         <select id="select-country" class="input-xcom"></select>
-        <input type="text" id="pass-field" class="input-xcom" placeholder="PASSWORD / ACCESS_CODE" maxlength="8">
+        <input type="password" id="pass-field" class="input-xcom" placeholder="PASSWORD / ACCESS_CODE" maxlength="8" autocomplete="off">
         <button class="btn-action" onclick="login()">CONECTAR</button>
     </div>
 
@@ -68,7 +68,7 @@
         <div class="module-content">
             <h3 id="ex-title" style="color: var(--xcom-blue);">DATA_FILE</h3>
             <p id="ex-desc" style="font-size: 1.1em; line-height: 1.5;">...</p>
-            <input type="text" id="ex-input" class="input-xcom" placeholder="RESPUESTA">
+            <input type="text" id="ex-input" class="input-xcom" placeholder="RESPUESTA" autocomplete="off">
             <br>
             <button class="btn-action" onclick="validateExercise()">ENVIAR DATOS</button>
         </div>
@@ -84,6 +84,9 @@
 </div>
 
 <script>
+
+    const SISTEMA_ACTIVO = true;
+
     let currentCountry = "";
     let currentProject = "";
     let currentExId = "";
@@ -113,6 +116,12 @@
     }
 
     function login() {
+
+        if (!SISTEMA_ACTIVO) {
+            alert("Los aliens tienen hackeada la comunicacion, el servicio no esta disponible por el momento");
+            return;
+        }
+
         const pass = document.getElementById('pass-field').value;
         const country = document.getElementById('select-country').value;
         const expectedKey = credencialesPaises[country];
@@ -448,11 +457,11 @@
             break;
 
         case 'ingenieria_instalaciones':
-            pista = "Aqui debes utilizar todo lo aprendido mezclado... Mucha suerte soldado";
+            pista = "Aqui debes utilizar todos los temas mezclados... Mucha suerte soldado";
             break;
 
         case 'vectores_proyeccion':
-            pista = "Aqui debes utilizar todo lo aprendido mezclado... Mucha suerte soldado";
+            pista = "Aqui debes utilizar todos los temas mezclados... Mucha suerte soldado";
             break;
 
         default:
@@ -480,9 +489,9 @@ window.addEventListener('keydown', function(e) {
     if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's')) {
         e.preventDefault();
     }
-   // if (e.key === 'F12') {
-   //     e.preventDefault();
-  //  }
+    if (e.key === 'F12') {
+        e.preventDefault();
+    }
 });
 
 // Bloquea el arrastre del texto
