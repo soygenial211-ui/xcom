@@ -514,7 +514,13 @@ document.addEventListener("visibilitychange", function() {
 // Si el navegador pierde el foco (ej. al intentar abrir la barra de capturas)
 window.onblur = function() {
     document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
-        el.style.filter = 'blur(20px)'; // Borroso extremo
+        el.style.filter = 'blur(20px)'; // Borroso extremo temporal
+    });
+};
+
+window.onfocus = function() {
+    document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
+        el.style.filter = ''; // Restaura el control al CSS original
     });
 };
 
