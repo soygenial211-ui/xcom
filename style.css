@@ -198,4 +198,5 @@
     color: #000 !important; 
     filter: blur(0) !important;
     transition: none !important;
+    pointer-events: auto !important;
 }
