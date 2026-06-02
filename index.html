@@ -86,7 +86,7 @@
 <script>
 
     const SISTEMA_ACTIVO = true;
-
+    const BLUR_ACTIVO = false; // true = Con blur (Original) | false = Sin blur (Desactivado)
     let currentCountry = "";
     let currentProject = "";
     let currentExId = "";
@@ -502,27 +502,60 @@ window.addEventListener('dragstart', function(e) {
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo y borramos progreso
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo, borramos progreso y forzamos login
+// Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo, borramos progreso y forzamos login
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
-        limpiarProgreso(); // Asegura la pérdida de datos ante la brecha
-        document.getElementById('pass-field').value = ""; // Limpia el campo de contraseña por seguridad
-        showScreen('screen-login'); // Redirección corregida a la pantalla de login
+        limpiarProgreso(); 
+        document.getElementById('pass-field').value = ""; 
+        showScreen('screen-login'); 
         alert("BRECHA DE SEGURIDAD: CONEXIÓN INTERRUMPIDA.");
     }
 });
 
 // Si el navegador pierde el foco (ej. al intentar abrir la barra de capturas)
 window.onblur = function() {
-    document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
-        el.style.filter = 'blur(20px)'; // Borroso extremo temporal
-    });
+    if (BLUR_ACTIVO) { // <-- Condición añadida
+        document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
+            el.style.filter = 'blur(20px)'; 
+        });
+    }
 };
 
 window.onfocus = function() {
-    document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
-        el.style.filter = ''; // Restaura el control al CSS original
-    });
+    if (BLUR_ACTIVO) { // <-- Condición añadida
+        document.querySelectorAll('.fragmento-bloqueado').forEach(el => {
+            el.style.filter = ''; 
+        });
+    }
 };
+
+window.onload = function() {
+        // --- CONTROL INTERACTIVO DE BLUR ---
+        if (!BLUR_ACTIVO) {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .fragmento-bloqueado, 
+                .fragmento-bloqueado:hover, 
+                .fragmento-bloqueado:active { 
+                    filter: none !important; 
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        const select = document.getElementById('select-country');
+        select.innerHTML = ""; 
+        
+        Object.keys(credencialesPaises).sort().forEach(pais => {
+            const opt = document.createElement('option');
+            opt.value = pais;
+            opt.textContent = pais.toUpperCase();
+            select.appendChild(opt);
+        });
+
+        // Inicializa el progreso por primera vez
+        limpiarProgreso();
+    };
 
 </script>
 
