@@ -167,11 +167,20 @@
     cursor: help;
 }
 
-/* Estado base: Siempre borroso por defecto[cite: 3, 4] */
+/* Estado base: Siempre borroso por defecto[cite: 3, 4]filter: blur(5px);  */
+/* Efecto de revelado XCOM */
+.reveal-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    cursor: help;
+}
+
+/* Estado base: Borroso por defecto */
 .fragmento-bloqueado {
     background-color: rgba(0, 31, 51, 0.6); 
     color: var(--xcom-text); 
-    filter: blur(5px); 
+    filter: blur(5px); /* Añadido para que el estado original funcione correctamente */
     transition: filter 0.15s ease, background-color 0.15s;
     padding: 2px 8px;
     border-radius: 2px;
@@ -183,20 +192,19 @@
     outline: none;
 }
 
-/* FORZAR BORROSO AL PASAR EL MOUSE (Sin presionar) */
+/* Forzar borroso al pasar el mouse sin presionar */
 .fragmento-bloqueado:hover {
-    filter: blur(5px) !important;
+    filter: blur(5px) !important; /* Añadido para consistencia */
     background-color: rgba(0, 31, 51, 0.6) !important;
     color: var(--xcom-text) !important;
 }
 
-/* REVELADO ÚNICAMENTE AL PRESIONAR */
-/* Usamos :hover:active para que solo funcione si el mouse está encima Y presionando */
+/* Revelado únicamente al presionar */
 .fragmento-bloqueado:active, 
 .fragmento-bloqueado:hover:active {
     background-color: var(--xcom-gold) !important; 
     color: #000 !important; 
-    filter: blur(0) !important;
+    filter: blur(0) !important; /* Añadido para limpiar el filtro al hacer click */
     transition: none !important;
     pointer-events: auto !important;
 }
