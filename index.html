@@ -503,14 +503,14 @@ window.addEventListener('dragstart', function(e) {
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo y borramos progreso
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo, borramos progreso y forzamos login
 // Si el usuario cambia de pestaña o minimiza el navegador, ocultamos todo, borramos progreso y forzamos login
-document.addEventListener("visibilitychange", function() {
+/*document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
         limpiarProgreso(); 
         document.getElementById('pass-field').value = ""; 
         showScreen('screen-login'); 
-        alert("BRECHA DE SEGURIDAD: CONEXIÓN INTERRUMPIDA.");
+       alert("BRECHA DE SEGURIDAD: CONEXIÓN INTERRUMPIDA.");
     }
-});
+});*/
 
 // Si el navegador pierde el foco (ej. al intentar abrir la barra de capturas)
 window.onblur = function() {
