@@ -115,36 +115,87 @@
         });
     }
 
+
+
+    // --- NUEVA LÓGICA DE DETECCIÓN ALIENÍGENA ---
+let alienTimer = null;
+
+function iniciarTemporizadorAlien() {
+    // Cancela cualquier temporizador previo activo
+    if (alienTimer) clearTimeout(alienTimer);
+    
+    // Calcula un tiempo aleatorio entre 5 y 10 minutos (en milisegundos)
+    // 5 minutos = 300,000 ms | 10 minutos = 600,000 ms
+    //const tiempoAleatorio = Math.floor(Math.random() * (600000 - 300000 + 1)) + 300000;
+    // CAMBIO TEMPORAL PARA TESTEO (Entre 5 y 10 segundos)
+const tiempoAleatorio = Math.floor(Math.random() * (240000 - 400000 + 1)) + 5000;
+    alienTimer = setTimeout(() => {
+        lanzarAtaqueAlien();
+    }, tiempoAleatorio);
+}
+
+function lanzarAtaqueAlien() {
+    alert("¡ALERTA! LOS ALIENÍGENAS ESTÁN HACKEANDO LA TERMINAL.");
+    
+    // Recarga el iframe para forzar un nuevo inicio del juego
+    const frame = document.getElementById('alien-frame');
+    frame.src = frame.src; 
+    
+    // Muestra la pantalla del minijuego bloqueando todo lo demás
+    document.getElementById('alien-overlay').style.display = 'block';
+}
+
+// Esta función es invocada por el archivo matrix.html cuando el alumno gana
+function cerrarPuzzle() {
+    document.getElementById('alien-overlay').style.display = 'none';
+    alert("CONEXIÓN REESTABLECIDA. PROTOCOLO DE SEGURIDAD ACTIVADO.");
+    // Reinicia el temporizador para un próximo ataque eventual
+    iniciarTemporizadorAlien(); 
+}
+
+// Esta función es invocada por el archivo matrix.html cuando el alumno pierde definitivamente
+function forzarCerrarSesion() {
+    document.getElementById('alien-overlay').style.display = 'none';
+    alert("SISTEMA COMPROMETIDO. CERRANDO SESIÓN POR SEGURIDAD.");
+    logout();
+}
+
+
+
+
     function login() {
-
-        if (!SISTEMA_ACTIVO) {
-            alert("Los aliens tienen hackeada la comunicacion, el servicio no esta disponible por el momento");
-            return;
-        }
-
-        const pass = document.getElementById('pass-field').value;
-        const country = document.getElementById('select-country').value;
-        const expectedKey = credencialesPaises[country];
-
-        if(pass === "XCOM2026" || pass === expectedKey) {
-            currentCountry = country;
-            seed = pass === "XCOM2026" ? 2026 : parseInt(expectedKey.split('-')[0], 36) || 1234;
-            document.getElementById('header-country').innerText = country.toUpperCase();
-            
-            alert("ACCESO CONCEDIDO."); // Alerta de confirmación integrada
-            
-            renderProjects();
-            showScreen('screen-projects');
-        } else {
-            alert("ACCESO DENEGADO.");
-        }
+    if (!SISTEMA_ACTIVO) {
+        alert("Los aliens tienen hackeada la comunicacion, el servicio no esta disponible por el momento");
+        return;
     }
+
+    const pass = document.getElementById('pass-field').value;
+    const country = document.getElementById('select-country').value;
+    const expectedKey = credencialesPaises[country];
+
+    if(pass === "XCOM2026" || pass === expectedKey) {
+        currentCountry = country;
+        seed = pass === "XCOM2026" ? 2026 : parseInt(expectedKey.split('-')[0], 36) || 1234;
+        document.getElementById('header-country').innerText = country.toUpperCase();
+        
+        alert("ACCESO CONCEDIDO.");
+        
+        // --- ACTIVACIÓN DEL TEMPORIZADOR AL PASAR EL LOGIN ---
+        iniciarTemporizadorAlien();
+        
+        renderProjects();
+        showScreen('screen-projects');
+    } else {
+        alert("ACCESO DENEGADO.");
+    }
+}
 
     function logout() {
-        document.getElementById('pass-field').value = "";
-        limpiarProgreso(); // Borra el progreso del país anterior
-        showScreen('screen-login');
-    }
+    if (alienTimer) clearTimeout(alienTimer); // Detiene el temporizador al salir voluntariamente
+    document.getElementById('pass-field').value = "";
+    limpiarProgreso();
+    showScreen('screen-login');
+}
 
     function renderProjects() {
     const grid = document.getElementById('project-grid');
@@ -567,5 +618,11 @@ window.onload = function() {
     <button class="btn-back" onclick="closeHelp()" style="width: 100%; margin: 0;">ENTENDIDO</button>
 </div>
 <div id="qrcode" style="display:none;"></div>
+
+
+<div id="alien-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:99999;">
+    <iframe id="alien-frame" src="matrix.html" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
 </body>
 </html>
