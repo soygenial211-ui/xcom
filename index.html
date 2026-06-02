@@ -167,18 +167,29 @@
 }
 
     function showScreen(id) {
+    const viewport = document.getElementById('viewport');
+    const alerta = document.getElementById('alerta-alienigena');
+
     document.querySelectorAll('#viewport > div').forEach(div => {
         div.style.display = 'none';
     });
     
     const target = document.getElementById(id);
-    // Si es el login, usamos flex para que no se desacomode el centrado
+    
     if (id === 'screen-login') {
         target.style.display = 'flex';
         target.style.flexDirection = 'column';
         target.style.alignItems = 'center';
+        
+        // El login permanece limpio y completamente operativo
+        viewport.classList.remove('sistema-hackeado');
+        if (alerta) alerta.style.display = 'none';
     } else {
         target.style.display = 'block';
+        
+        // Se aplica el colapso visual e interactivo al saltar el login
+        viewport.classList.add('sistema-hackeado');
+        if (alerta) alerta.style.display = 'block';
     }
 }
 
